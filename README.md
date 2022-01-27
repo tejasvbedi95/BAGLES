@@ -167,11 +167,6 @@ pred.dfr <- data.frame(DeltaC = ny.data$DeltaC[341:490],
                        DeltaC.ul = res_rj_ny$N_pred_upp,
                        date = ny.data$date[341:490])
 
-## For better scaling of plots, the intervals for GLC and SIR are bounded
-pred.dfr[pred.dfr$state == "New York", "DeltaC.ul"] <- ifelse(pred.dfr[pred.dfr$state == "New York", "DeltaC.ul"] > 25000, 25000,
-                                                                pred.dfr[pred.dfr$state == "New York", "DeltaC.ul"])
-
-
 data.frame(N_fit = res_rj_ny$N_fit[1:340],
          date = ny.data$date[1:340],
          DeltaC = ny.data$DeltaC[1:340]) %>%
