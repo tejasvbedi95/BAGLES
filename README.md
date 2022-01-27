@@ -56,7 +56,7 @@ rho <- 0.3
 sim <- cp_simulator(T, M, phi, lambda, p, alpha, K, delta, C0 = 100)
 ```
 
-## Fitting manual and automatic BayesSMEG via MCMC and rjMCMC respectively
+## Change point detection on growth simulated data via BayesSMEG (manual and automatic)
 
 ``` r
 ## BayesSMEG with fixed M = 3 (default settings)
@@ -107,9 +107,9 @@ ggplot(data = C_dfr, aes(x = Days, y = P)) +
 
 ![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/5826af4199a8a775b499cf6354f0d1429ac79dbb/figures/cp_detection.png)
 
-``` r
-### Estimation of final epidemic size with density and intervals
+## Estimation of final epidemic size `K` with posterior density and intervals
 
+``` r
 K_dist <- res_fixed$store_list$K_store[3,]
 
 
