@@ -1,61 +1,23 @@
-Bayesian Segmentation Model for Epidemic Growth.
+# Loading libraries
 
-## Tutorial
-
-The following script is used to apply BayesSMEG to jointly detect
-multiple change points based on the daily confirmed cases of COVID-19
-and estimating the final epidemic size K. We also demonstrate long term
-forecasting of New York COVID-19 daily cases via automatic BayesSMEG.
-
-## Required Packages
-
-``` r
 library(tidyverse)
-```
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-
-    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-    ## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-    ## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(Rcpp)
-```
 
-## Required Functions
+# Loading functions
 
-``` r
 sourceCpp('scripts/core_fixed.cpp')
 sourceCpp('scripts/core_auto.cpp')
 sourceCpp('scripts/Delta_arrange.cpp')
 source('scripts/functions.R')
-```
 
-## Simulating growth data
+# Loading data
 
-The following are the data components:
+pop.data <- read.csv("data/pop.data.csv",header=T,row.names=1)
+us.data <- read.csv("data/us-states.csv", header = T)
 
--   T: Total time points (days)
--   M: Number of sub-divisions / change points in the entire data
--   N: Population size of a given region
--   rho: Population proportion
--   DeltaC: Daily confirmed cases
--   C: Cumulative confirmed cases
 
-The following are the model parameters:
+## Simulating growth epidemiological data
 
--   lambda: Growth rate vector of size M
--   p: Growth rate vector of size M
--   K: Final epidemic size vector of size M
--   delta: Change point indicator vector
-
-``` r
 T = 150
 M = 3
 lambda <- c(0.1, 0.06, 0.08)
@@ -67,48 +29,15 @@ delta <- delta_arrange(T, M)
 N <- 200000
 rho <- 0.3
 
-sim <- cp_simulator(T, M, phi, lambda, p, alpha, K, delta, C0 = 100)
-```
+sim <- cp_simulator( T, M, phi, lambda, p, alpha, K, delta, C0 = 100, seed = 7)
 
-## Fitting manual and automatic BayesSMEG via MCMC and rjMCMC respectively
-
-``` r
-## BayesSMEG with fixed M = 3 (default settings)
-
+## BayesSMEG with fixed M = 3
 res_fixed <- growth_cp(sim$C, M = 3, is_p = -1.0, is_alpha = 1.0, POP = ceiling(N*rho), T_fin = 0, w = c(0.2, 0.4, 0.4), store = T)
-```
-
-    ## 0% has been done
-    ## 10% has been done
-    ## 20% has been done
-    ## 30% has been done
-    ## 40% has been done
-    ## 50% has been done
-    ## 60% has been done
-    ## 70% has been done
-    ## 80% has been done
-    ## 90% has been done
-
-``` r
 res_mat_fixed <- apply(res_fixed$CI_mat[-1,], 2, mean)
 CI_fixed <- CI_cp(res_fixed, which(res_fixed$map$delta_map == 1))
 
 ## BayesSMEG with unknown M (alpha = 0.001)
 res_auto <- growth_cp_rj(sim$DeltaC, M_max = 20, POP = ceiling(N*rho), T_fin = 0, alpha = 0.001, store = T)
-```
-
-    ## 0% has been done
-    ## 10% has been done
-    ## 20% has been done
-    ## 30% has been done
-    ## 40% has been done
-    ## 50% has been done
-    ## 60% has been done
-    ## 70% has been done
-    ## 80% has been done
-    ## 90% has been done
-
-``` r
 res_mat_auto <- apply(res_auto$CI_mat[-1,], 2, mean)
 CI_auto <- CI_cp(res_auto, which(res_auto$map$delta_map == 1))
 
@@ -145,12 +74,13 @@ ggplot(data = C_dfr, aes(x = Days, y = P)) +
   facet_wrap(~ Method, scales = "free") +
   geom_point(data = comb_dfr, size = 0.5, aes(color = P_col)) +
   theme_light() + labs(y = "PPI") + theme(legend.position = "none")
-```
 
-![](README_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
-``` r
 ### Estimation of final epidemic size with density and intervals
+
+res_fixed <- growth_cp(sim$C, M = 3, is_p = -1.0, is_alpha = 1.0, POP = ceiling(N*rho), T_fin = 0, w = c(0.2, 0.4, 0.4), store = T)
+#res_fixed <- growth_cp(sim$C, M = 1, is_p = -1.0, is_alpha = 1.0, POP = ceiling(N*rho), T_fin = 0, w = c(0.2, 0.4, 0.4), store = T)
+
 
 K_dist <- res_fixed$store_list$K_store[3,]
 
@@ -181,17 +111,9 @@ K.dfr %>%
   geom_vline(xintercept = 15000, color = "green") +
   theme_light() + labs(x = "K", y = "Density") +
   scale_fill_manual(values = cols, aesthetics = c("fill"), name = "HPD Intervals")
-```
 
-![](README_files/figure-markdown_github/unnamed-chunk-4-2.png)
 
-## Long term forecasting of New York daily COVID-19 cases via automatic BayesSMEG
-
-``` r
-## Reading Data
-
-pop.data <- read.csv("data/pop.data.csv",header=T,row.names=1)
-us.data <- read.csv("data/us-states.csv", header = T)
+## Long term prediction of New York daily cases via BayesSMEG (auto)
 
 ny.data <- us.data %>%
   select(-fips, -deaths) %>%
@@ -203,20 +125,7 @@ N_ny <- pop.data[which(rownames(pop.data) == "New York"),]
 
 res_rj_ny <- growth_cp_rj(ny.data$DeltaC[-1][1:340], M_max = 50,
                             POP = N_ny*0.3, T_fin = 150, alpha = 0.000001, store = T)
-```
 
-    ## 0% has been done
-    ## 10% has been done
-    ## 20% has been done
-    ## 30% has been done
-    ## 40% has been done
-    ## 50% has been done
-    ## 60% has been done
-    ## 70% has been done
-    ## 80% has been done
-    ## 90% has been done
-
-``` r
 pred.dfr <- data.frame(DeltaC = ny.data$DeltaC[341:490],
                        N_fit = res_rj_ny$N_pred_mean,
                        DeltaC.ll = res_rj_ny$N_pred_lwr,
@@ -247,8 +156,11 @@ data.frame(N_fit = res_rj_ny$N_fit[1:340],
         legend.box.just = "left",
         legend.margin = margin(6, 6, 6, 6)
   ) 
-```
 
-    ## Warning: Removed 1 rows containing missing values (geom_point).
 
-![](README_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+
+
+
+
+
