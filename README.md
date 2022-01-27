@@ -105,7 +105,7 @@ ggplot(data = C_dfr, aes(x = Days, y = P)) +
   theme_light() + labs(y = "PPI") + theme(legend.position = "none")
 ```
 
-![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/main/cp_detection.png?raw=true)
+![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/5826af4199a8a775b499cf6354f0d1429ac79dbb/figures/cp_detection.png)
 
 ``` r
 ### Estimation of final epidemic size with density and intervals
@@ -140,8 +140,8 @@ K.dfr %>%
   theme_light() + labs(x = "K", y = "Density") +
   scale_fill_manual(values = cols, aesthetics = c("fill"), name = "HPD Intervals")
 ```
-![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/main/K_density.png?raw=true)
-
+![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/5826af4199a8a775b499cf6354f0d1429ac79dbb/figures/K_density.png
+)
 ## Long term forecasting of New York daily COVID-19 cases via automatic BayesSMEG
 
 ``` r
@@ -193,4 +193,4 @@ data.frame(N_fit = res_rj_ny$N_fit[1:340],
   ) 
 ```
 
-![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/main/ny_prediction.png?raw=true)
+![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/5826af4199a8a775b499cf6354f0d1429ac79dbb/figures/ny_prediction.png)
