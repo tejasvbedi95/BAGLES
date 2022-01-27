@@ -1,4 +1,4 @@
-Bayesian Segmentation Model for Epidemic Growth.
+# Bayesian Segmentation Model for Epidemic Growth
 
 ## Tutorial
 
@@ -27,19 +27,19 @@ source('scripts/functions.R')
 
 The following are the data components:
 
--   T: Total time points (days)
--   M: Number of sub-divisions / change points in the entire data
--   N: Population size of a given region
--   rho: Population proportion
--   DeltaC: Daily confirmed cases
--   C: Cumulative confirmed cases
+-   `T`: Total time points (days)
+-   `M`: Number of sub-divisions / change points in the entire data
+-   `N`: Population size of a given region
+-   `rho`: Population proportion
+-   `DeltaC`: Daily confirmed cases
+-   `C`: Cumulative confirmed cases
 
 The following are the model parameters:
 
--   lambda: Growth rate vector of size M
--   p: Growth rate vector of size M
--   K: Final epidemic size vector of size M
--   delta: Change point indicator vector
+-   `lambda`: Growth rate vector of size M
+-   `p`: Growth rate vector of size M
+-   `K`: Final epidemic size vector of size M
+-   `delta`: Change point indicator vector
 
 ``` r
 T = 150
