@@ -11,20 +11,6 @@ forecasting of New York COVID-19 daily cases via automatic BayesSMEG.
 
 ``` r
 library(tidyverse)
-```
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-
-    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-    ## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-    ## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-    ## ✓ readr   1.4.0     ✓ forcats 0.5.1
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(Rcpp)
 ```
 
@@ -76,39 +62,11 @@ sim <- cp_simulator(T, M, phi, lambda, p, alpha, K, delta, C0 = 100)
 ## BayesSMEG with fixed M = 3 (default settings)
 
 res_fixed <- growth_cp(sim$C, M = 3, is_p = -1.0, is_alpha = 1.0, POP = ceiling(N*rho), T_fin = 0, w = c(0.2, 0.4, 0.4), store = T)
-```
-
-    ## 0% has been done
-    ## 10% has been done
-    ## 20% has been done
-    ## 30% has been done
-    ## 40% has been done
-    ## 50% has been done
-    ## 60% has been done
-    ## 70% has been done
-    ## 80% has been done
-    ## 90% has been done
-
-``` r
 res_mat_fixed <- apply(res_fixed$CI_mat[-1,], 2, mean)
 CI_fixed <- CI_cp(res_fixed, which(res_fixed$map$delta_map == 1))
 
 ## BayesSMEG with unknown M (alpha = 0.001)
 res_auto <- growth_cp_rj(sim$DeltaC, M_max = 20, POP = ceiling(N*rho), T_fin = 0, alpha = 0.001, store = T)
-```
-
-    ## 0% has been done
-    ## 10% has been done
-    ## 20% has been done
-    ## 30% has been done
-    ## 40% has been done
-    ## 50% has been done
-    ## 60% has been done
-    ## 70% has been done
-    ## 80% has been done
-    ## 90% has been done
-
-``` r
 res_mat_auto <- apply(res_auto$CI_mat[-1,], 2, mean)
 CI_auto <- CI_cp(res_auto, which(res_auto$map$delta_map == 1))
 
@@ -147,7 +105,7 @@ ggplot(data = C_dfr, aes(x = Days, y = P)) +
   theme_light() + labs(y = "PPI") + theme(legend.position = "none")
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/main/cp_detection.png?raw=true)
 
 ``` r
 ### Estimation of final epidemic size with density and intervals
@@ -182,8 +140,7 @@ K.dfr %>%
   theme_light() + labs(x = "K", y = "Density") +
   scale_fill_manual(values = cols, aesthetics = c("fill"), name = "HPD Intervals")
 ```
-
-![](README_files/figure-markdown_github/unnamed-chunk-4-2.png)
+![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/main/K_density.png?raw=true)
 
 ## Long term forecasting of New York daily COVID-19 cases via automatic BayesSMEG
 
@@ -203,20 +160,7 @@ N_ny <- pop.data[which(rownames(pop.data) == "New York"),]
 
 res_rj_ny <- growth_cp_rj(ny.data$DeltaC[-1][1:340], M_max = 50,
                             POP = N_ny*0.3, T_fin = 150, alpha = 0.000001, store = T)
-```
 
-    ## 0% has been done
-    ## 10% has been done
-    ## 20% has been done
-    ## 30% has been done
-    ## 40% has been done
-    ## 50% has been done
-    ## 60% has been done
-    ## 70% has been done
-    ## 80% has been done
-    ## 90% has been done
-
-``` r
 pred.dfr <- data.frame(DeltaC = ny.data$DeltaC[341:490],
                        N_fit = res_rj_ny$N_pred_mean,
                        DeltaC.ll = res_rj_ny$N_pred_lwr,
@@ -249,6 +193,4 @@ data.frame(N_fit = res_rj_ny$N_fit[1:340],
   ) 
 ```
 
-    ## Warning: Removed 1 rows containing missing values (geom_point).
-
-![](README_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/main/ny_prediction.png?raw=true)
