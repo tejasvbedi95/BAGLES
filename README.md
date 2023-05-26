@@ -1,6 +1,6 @@
 # Bayesian Segmentation Model for Epidemic Growth
 
-## Tutorial
+# Tutorial
 
 The following script is used to apply BayesSMEG to jointly detect
 multiple change points based on the daily confirmed cases of COVID-19
