@@ -85,7 +85,7 @@ res_auto <- growth_cp_rj(sim$DeltaC, M_max = 20, POP = ceiling(N*rho), T_fin = 0
 res_mat_auto <- apply(res_auto$CI_mat[-1,], 2, mean)
 CI_auto <- CI_cp(res_auto, which(res_auto$map$delta_map == 1))
 
-### Change point detection plots with PPI and cumulative cases mapped together
+## Change point detection plots with PPI and cumulative cases mapped together
 
 comb_dfr <- data.frame(Days = rep(1:150, 2),
                        P = c(res_mat_fixed, res_mat_auto),
