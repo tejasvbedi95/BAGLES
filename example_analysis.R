@@ -16,7 +16,7 @@ pop.data <- read.csv("data/pop.data.csv",header=T,row.names=1)
 us.data <- read.csv("data/us-states.csv", header = T)
 
 
-## Simulating growth epidemiological data
+# Simulating growth epidemiological data
 
 T = 150
 M = 3
