@@ -22,7 +22,6 @@ static CharacterVector csample_char( CharacterVector x, int size, bool replace, 
 Rcpp::List growth_cp_rj(Col<int> DeltaC, int M_max, int POP, int T_fin, double alpha, bool store) {
   
   // Read data information
-  //int T = C.length();
   int T = DeltaC.size();
   Col<int> C(T, fill::zeros);
   int M = 2, M_temp = 0;
