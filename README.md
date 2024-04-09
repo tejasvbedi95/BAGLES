@@ -1,4 +1,4 @@
-# Bayesian Segmentation Model for Epidemic Growth
+# Bayesian Analysis of Growth Curves for Epidemiological Longitudinal Studies
 
 # Tutorial
 
