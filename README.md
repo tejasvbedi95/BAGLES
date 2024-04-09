@@ -2,7 +2,7 @@
 
 # Tutorial
 
-The following script is used to apply BayesSMEG to jointly detect
+The following script is used to apply BAGLES to jointly detect
 multiple change points based on the daily confirmed cases of COVID-19
 and estimating the final epidemic size K. We also demonstrate long term
 forecasting of New York COVID-19 daily cases via automatic BayesSMEG.
@@ -56,7 +56,7 @@ rho <- 0.3
 sim <- cp_simulator(T, M, phi, lambda, p, alpha, K, delta, C0 = 100)
 ```
 
-## Change point detection on growth simulated data via BayesSMEG (manual and automatic)
+## Change point detection on growth simulated data via BAGLES (manual and automatic)
 
 ``` r
 ## BayesSMEG with fixed M = 3 (default settings)
@@ -142,7 +142,7 @@ K.dfr %>%
 ```
 ![alt text](https://github.com/tejasvbedi95/BayesSMEG/blob/5826af4199a8a775b499cf6354f0d1429ac79dbb/figures/K_density.png
 )
-## Long term forecasting of New York daily COVID-19 cases via automatic BayesSMEG
+## Long term forecasting of New York daily COVID-19 cases via automatic BAGLES
 
 ``` r
 ## Reading Data
