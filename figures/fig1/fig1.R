@@ -1,6 +1,6 @@
 library(tidyverse)
 library(ggpubr)
-
+##
 load("data/fig1.RData")
 
 gg1 <- ggplot(data = out.growth.temp3, aes(x = Method, y = Value)) +
