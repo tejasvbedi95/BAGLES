@@ -10,7 +10,7 @@ sourceCpp('scripts/core_auto.cpp')
 sourceCpp('scripts/Delta_arrange.cpp')
 source('scripts/functions.R')
 
-# Loading data
+### Loading data
 
 pop.data <- read.csv("data/pop.data.csv",header=T,row.names=1)
 us.data <- read.csv("data/us-states.csv", header = T)
