@@ -10,7 +10,7 @@
 #   data[is.na(data)]<-0
 #   return(data)
 # }
-
+##
 set.data<-function(data,st){
   data<-subset(data,state==st,select=c(date,positive))
   #N<-pop.data["Texas",]
