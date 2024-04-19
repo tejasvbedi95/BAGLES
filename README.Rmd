@@ -29,6 +29,7 @@ library(Rcpp)
 ### Required Functions
 
 ```{r}
+##
 sourceCpp('scripts/core_fixed.cpp')
 sourceCpp('scripts/core_auto.cpp')
 sourceCpp('scripts/Delta_arrange.cpp')
